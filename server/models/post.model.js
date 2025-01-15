@@ -14,7 +14,12 @@ module.exports = (connection, DataTypes) => {
       imgUrl: {
         type: DataTypes.STRING,
         defaultValue: "https://www.ntaskmanager.com/wp-content/uploads/2022/08/what-is-problem-management.png"
-      }
+      },
+      category: {
+        type: DataTypes.ENUM("Front Side","Back Side","Both Sides"),
+        allowNull: false,
+        defaultValue: "Both Sides",
+      },
     },
   );
   return Post;

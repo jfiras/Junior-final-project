@@ -24,8 +24,15 @@ module.exports = {
   },
   addOnePost: async (req, res) => {
     try {
-      const post = await Posts.create(req.body);
-      res.send({ message: "success to add one post", data: post });
+      // console.log("id inside add one post from verify token", req.user);
+      const { title, body, category } = req.body;
+      const post = await Posts.create({
+        title: title,
+        body: body,
+        category: category,
+        userId: req.user,
+      });
+      res.status(201).send({ message: "success to add one post", data: post });
     }
     catch (err) {
       console.error({ messageError: "unable to add one post", error: err });

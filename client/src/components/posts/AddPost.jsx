@@ -6,11 +6,17 @@ import Swal from "sweetalert2";
 const AddPost = ({ handleAddPost, changeView }) => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
+  const [category, setCategory] = useState("");
   const [imgUrl, setImgUrl] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleAddPost({ title: title, body: body, imgUrl: imgUrl, userId: 1 });
+    handleAddPost({
+      title: title,
+      body: body,
+      category: category,
+      imgUrl: imgUrl,
+    });
     Swal.fire({
       title: "Good job!",
       text: "Your post is published 📨",
@@ -47,12 +53,23 @@ const AddPost = ({ handleAddPost, changeView }) => {
               value={body}
               onChange={setBody}
             />
-            {/* <textarea
-              className="form-control"
-              id="contentTextarea"
-              rows="3"
-              placeholder="Add your content here..."
-            ></textarea> */}
+          </div>
+          <div className="mb-3">
+            <label htmlFor="categorySelect" className="form-label">
+              Category
+            </label>
+            <select
+              className="form-select"
+              id="categorySelect"
+              aria-label="Default select example"
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              <option value="Both Sides" selected>
+                Both Sides
+              </option>
+              <option value="Front Side">Front side</option>
+              <option value="Back Side">Back Side</option>
+            </select>
           </div>
           <div className="mb-3">
             <label htmlFor="inputFile" className="form-label">

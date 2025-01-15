@@ -23,8 +23,9 @@ module.exports = {
     },
     addOneComment: async (req, res) => {
         try {
-            const comment = await Comments.create(req.body);
-            res.send({ message: "success to add one comment", data: comment });
+            const { body, postId } = req.body;
+            const comment = await Comments.create({ body: body, userId: req.user, postId: postId });
+            res.status(201).send({ message: "success to add one comment", data: comment });
         }
         catch (err) {
             console.error({ messageError: "unable to add one comment", error: err });

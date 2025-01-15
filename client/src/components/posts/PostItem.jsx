@@ -50,7 +50,7 @@ const PostItem = ({
         <div className="mb-1 text-body-secondary">
           {post.user.username},{" "}
           {moment(post.createdAt).startOf("hour").fromNow()}
-          {post.createdAt === post.updatedAt ? "" : <p>(edited)</p>}
+          {post.createdAt === post.updatedAt ? "" : <p> (edited)</p>}
         </div>
         <div className="col p-4 d-flex flex-column position-static">
           <p className="mb-auto">{parse(post.body)}</p>
@@ -71,7 +71,7 @@ const PostItem = ({
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
-                  handleAddComment({ body: body, userId: 1, postId: post.id });
+                  handleAddComment({ body: body, postId: post.id });
                 }}
               >
                 <textarea
@@ -123,17 +123,17 @@ const PostItem = ({
                 action cannot be undone!
               </p>
             </div>
-            <div class="modal-footer">
+            <div className="modal-footer">
               <button
                 type="button"
-                class="btn btn-secondary"
+                className="btn btn-secondary"
                 data-bs-dismiss="modal"
               >
                 Close
               </button>
               <button
                 type="button"
-                class="btn btn-danger"
+                className="btn btn-danger"
                 data-bs-dismiss="modal"
                 onClick={(e) => {
                   e.preventDefault();
