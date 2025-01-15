@@ -52,8 +52,26 @@ const PostItem = ({
           {moment(post.createdAt).startOf("hour").fromNow()}
           {post.createdAt === post.updatedAt ? "" : <p> (edited)</p>}
         </div>
+        <div className="mb-1 text-body-secondary">
+          {post.category === "Both Sides" ? (
+            <span class="badge rounded-pill text-bg-info">Both Sides</span>
+          ) : null}
+          {post.category === "Front Side" ? (
+            <span className="badge rounded-pill text-bg-primary">
+              Front Side
+            </span>
+          ) : null}
+          {post.category === "Back Side" ? (
+            <span class="badge rounded-pill text-bg-warning">Back Side</span>
+          ) : null}
+        </div>
         <div className="col p-4 d-flex flex-column position-static">
           <p className="mb-auto">{parse(post.body)}</p>
+          <img
+            src={post.imgUrl}
+            class="card-img-top"
+            alt="image of the post"
+          ></img>
         </div>
         <div>Comments:</div>
         <ul className="list-group list-group-flush">

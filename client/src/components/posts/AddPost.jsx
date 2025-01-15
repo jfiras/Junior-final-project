@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -8,20 +9,39 @@ const AddPost = ({ handleAddPost, changeView }) => {
   const [body, setBody] = useState("");
   const [category, setCategory] = useState("");
   const [imgUrl, setImgUrl] = useState("");
+  const [file, setFile] = useState(null);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    handleAddPost({
-      title: title,
-      body: body,
-      category: category,
-      imgUrl: imgUrl,
-    });
-    Swal.fire({
-      title: "Good job!",
-      text: "Your post is published 📨",
-      icon: "success",
-    });
+  // Cloudinary parameters:
+  // Cloud name: dq1jzgdch
+  // Preset name: Junior-final-project
+  // https://api.cloudinary.com/v1_1/
+
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault();
+      const form = new FormData();
+      form.append("file", file);
+      form.append("upload_preset", "Junior-final-project");
+      await axios
+        .post("https://api.cloudinary.com/v1_1/dq1jzgdch/upload", form)
+        .then((response) => {
+          setImgUrl("" + response.data.secure_url);
+          console.log("img url:", "" + response.data.secure_url);
+          handleAddPost({
+            title: title,
+            body: body,
+            category: category,
+            imgUrl: imgUrl,
+          });
+          Swal.fire({
+            title: "Good job!",
+            text: "Your post is published 📨",
+            icon: "success",
+          });
+        });
+    } catch (err) {
+      console.log("error to achieve cloudinary server, error:", err);
+    }
   };
 
   return (
@@ -81,7 +101,7 @@ const AddPost = ({ handleAddPost, changeView }) => {
               id="inputFile"
               aria-describedby="inputFile"
               aria-label="Upload"
-              // onChange={(e)=> setImgUrl(e.target.value)}
+              onChange={(e) => setFile(e.target.files[0])}
             ></input>
           </div>
 

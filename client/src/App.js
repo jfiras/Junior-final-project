@@ -41,10 +41,11 @@ function App() {
     setErrorMessage("");
     console.log(view);
   }
-  const handleGetOnePost = (id) => {
-    console.log("handle get one post");
-    axios.post(URL_POSTS + "/get/" + id);
-  }
+  
+  // const handleGetOnePost = (id) => {
+  //   console.log("handle get one post");
+  //   axios.post(URL_POSTS + "/get/" + id);
+  // }
 
   const handleAddPost = (newPost) => {
     console.log("handle add one post");
@@ -148,7 +149,12 @@ function App() {
   }
 
   const handleFilterPostsByCategories = (categorySearched) => {
-    console.log("handle search post");
+    // console.log("handle search post");*
+    if (categorySearched === "none") {
+      fetchPosts();
+    }
+    const filtered = posts.filter((post) => post.category === categorySearched);
+    setPosts(filtered);
   }
 
 
@@ -171,7 +177,7 @@ function App() {
     {!refreshToken && view === "Register" && <Register handleRegister={handleRegister} changeView={changeView} errorMessage={errorMessage} />}
 
     {refreshToken && view === "PostsList" ?
-      <PostsList posts={posts} handleAddComment={handleAddComment} handleDeletePost={handleDeletePost} handleUpdatePost={handleUpdatePost} handleSearchPosts={handleSearchPosts} />
+      <PostsList posts={posts} handleAddComment={handleAddComment} handleDeletePost={handleDeletePost} handleUpdatePost={handleUpdatePost} handleSearchPosts={handleSearchPosts} handleFilterPostsByCategories={handleFilterPostsByCategories} />
       : (view === "AddPost" ? <AddPost handleAddPost={handleAddPost} changeView={changeView} />
         : (view === "About" ? <About />
           : view === "Settings" ? <Settings /> : null))}
