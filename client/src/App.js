@@ -5,6 +5,7 @@ import axios from "axios";
 import About from "./components/About.jsx";
 import Settings from "./components/Settings.jsx";
 import PostsList from "./components/posts/PostsList.jsx";
+import UserPosts from "./components/posts/UserPostsList.jsx";
 import AddPost from "./components/posts/AddPost.jsx";
 import Register from "./components/Register.jsx";
 import Login from "./components/Login.jsx";
@@ -17,8 +18,10 @@ function App() {
   const URL_COMMENTS = "http://127.0.0.1:5000/api/comments";
 
   const [posts, setPosts] = useState([]);
+  const [userPosts, setUserPosts] = useState([]);
   const [view, setView] = useState("PostsList");
   const [refreshToken, setRefreshToken] = useState(null || localStorage.getItem("token"));
+  const [currentUser, setCurrentUser] = useState(null);
 
   // State to handle Errors
   const [errorMessage, setErrorMessage] = useState("");
@@ -36,21 +39,29 @@ function App() {
       });
   }
 
+  const fetchPostsByUser = () => {
+    const token = localStorage.getItem("token");
+    // console.log(token);
+    axios.get(URL_POSTS + "/getAllByUser", { headers: { Authorization: `Bearer ${token}` } })
+      .then((response) => {
+        console.log("data from the fetchPostsByUser func", response.data.data);
+        setUserPosts(response.data.data);
+      })
+      .catch((error) => {
+        console.error("failed to fetch posts by user, error:", error);
+      });
+  }
+
   const changeView = (newView) => {
     setView(newView);
     setErrorMessage("");
     console.log(view);
   }
-  
-  // const handleGetOnePost = (id) => {
-  //   console.log("handle get one post");
-  //   axios.post(URL_POSTS + "/get/" + id);
-  // }
 
   const handleAddPost = (newPost) => {
     console.log("handle add one post");
     const token = localStorage.getItem("token");
-    console.log(token);
+    // console.log(token);
     axios.post(URL_POSTS + "/add", newPost, { headers: { Authorization: `Bearer ${token}` } })
       .then(() => {
         console.log("post added from front");
@@ -67,7 +78,7 @@ function App() {
     axios.put(URL_POSTS + "/update/" + id, updatedTodo)
       .then(() => {
         console.log("todo updated from front");
-        fetchPosts();
+        fetchPostsByUser();
       })
       .catch((error) => {
         console.error("failed to update todo, error:", error);
@@ -79,7 +90,7 @@ function App() {
     axios.delete(URL_POSTS + "/delete/" + id)
       .then(() => {
         console.log("post deleted from front");
-        fetchPosts();
+        fetchPostsByUser();
       })
       .catch((error) => {
         console.error("failed to delete post, error:", error);
@@ -98,6 +109,21 @@ function App() {
       })
       .catch((error) => {
         console.error("failed to add one comment, error:", error);
+      });
+  }
+
+  // USERS METHODS
+
+  const getCurrentUser = () => {
+    console.log("func to get current user");
+    const token = localStorage.getItem("token");
+    axios.get(URL_USERS + "/getUser", { headers: { Authorization: `Bearer ${token}` } })
+      .then((response) => {
+        console.log("current user from front", response, token);
+        setCurrentUser(response.data);
+      })
+      .catch((error) => {
+        console.error("failed to get current user, error:", error);
       });
   }
 
@@ -160,6 +186,8 @@ function App() {
 
   useEffect(() => {
     fetchPosts();
+    fetchPostsByUser();
+    getCurrentUser();
   }, []);
 
   // console.log("refresh token: ", refreshToken, "view :", view);
@@ -177,10 +205,12 @@ function App() {
     {!refreshToken && view === "Register" && <Register handleRegister={handleRegister} changeView={changeView} errorMessage={errorMessage} />}
 
     {refreshToken && view === "PostsList" ?
-      <PostsList posts={posts} handleAddComment={handleAddComment} handleDeletePost={handleDeletePost} handleUpdatePost={handleUpdatePost} handleSearchPosts={handleSearchPosts} handleFilterPostsByCategories={handleFilterPostsByCategories} />
-      : (view === "AddPost" ? <AddPost handleAddPost={handleAddPost} changeView={changeView} />
-        : (view === "About" ? <About />
-          : view === "Settings" ? <Settings /> : null))}
+      <PostsList posts={posts} handleAddComment={handleAddComment} handleSearchPosts={handleSearchPosts} handleFilterPostsByCategories={handleFilterPostsByCategories} />
+      : (view === "UserPosts" ?
+        <UserPosts userPosts={userPosts} handleDeletePost={handleDeletePost} handleUpdatePost={handleUpdatePost} handleSearchPosts={handleSearchPosts} handleFilterPostsByCategories={handleFilterPostsByCategories} />
+        : (view === "AddPost" ? <AddPost handleAddPost={handleAddPost} changeView={changeView} />
+          : (view === "About" ? <About />
+            : view === "Settings" ? <Settings currentUser={currentUser} /> : null)))}
   </div>;
 }
 

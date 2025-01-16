@@ -5,7 +5,8 @@ const CommentItem = ({ comment, commentOwner }) => {
   return (
     <div>
       <li className="list-group-item">
-        {commentOwner}: {parse(comment.body)}
+        <span style={{ color: "DarkCyan" }}>{commentOwner}:</span>{" "}
+        {parse(comment.body)}
       </li>
     </div>
   );

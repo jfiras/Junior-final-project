@@ -9,6 +9,10 @@ const Header = ({ changeView, refreshToken, handleLogOut }) => {
     changeView("PostsList");
   };
 
+  const setViewToUserPosts = () => {
+    changeView("UserPosts");
+  };
+
   const setViewToAbout = () => {
     changeView("About");
   };
@@ -52,7 +56,7 @@ const Header = ({ changeView, refreshToken, handleLogOut }) => {
                 <a
                   href="#"
                   className="nav-link px-2 link-body-emphasis"
-                  onClick={setViewToPostsList}
+                  onClick={setViewToUserPosts}
                 >
                   Your Posts
                 </a>

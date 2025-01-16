@@ -13,6 +13,16 @@ module.exports = {
       console.error({ messageError: "unable to get all posts", error: err });
     }
   },
+  getAllPostsByUser: async (req, res) => {
+    try {
+      const posts = await Posts.findAll({ include: [{ model: Users }, { model: Comments, include: { model: Users } }] });
+      const postsByUser = posts.filter((post) => post.userId === req.user);
+      res.send({ message: "success to get all posts by user", data: postsByUser });
+    }
+    catch (err) {
+      console.error({ messageError: "unable to get all posts by user", error: err });
+    }
+  },
   getOnePost: async (req, res) => {
     try {
       const post = await Posts.findByPk(req.params.postId);

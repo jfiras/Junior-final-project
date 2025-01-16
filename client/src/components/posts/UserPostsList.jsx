@@ -1,9 +1,11 @@
 import React from "react";
-import PostItem from "./PostItem.jsx";
+import UserPostItem from "./UserPostItem.jsx";
 
-const PostsList = ({
-  posts,
+const UserPostsList = ({
+  userPosts,
   handleAddComment,
+  handleDeletePost,
+  handleUpdatePost,
   handleSearchPosts,
   handleFilterPostsByCategories,
 }) => {
@@ -11,7 +13,7 @@ const PostsList = ({
     <div>
       <div className="alert alert-success" role="alert">
         <h4>
-          <center>Try to help — check it out 📋</center>
+          <center>Welcome home — check it out 📋</center>
         </h4>
         <form className="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
           <input
@@ -39,12 +41,14 @@ const PostsList = ({
           </select>
         </form>
       </div>
-      {posts.map((post, index) => {
+      {userPosts.map((post, index) => {
         return (
-          <PostItem
+          <UserPostItem
             key={index}
             post={post}
             handleAddComment={handleAddComment}
+            handleDeletePost={handleDeletePost}
+            handleUpdatePost={handleUpdatePost}
           />
         );
       })}
@@ -52,4 +56,4 @@ const PostsList = ({
   );
 };
 
-export default PostsList;
+export default UserPostsList;

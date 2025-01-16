@@ -95,10 +95,11 @@ module.exports = {
     },
     currentUser: async (req, res) => {
         try {
-            const user = await Users.findOne({ id: req.user });
-            res.send(user);
+            console.log(req.user)
+            const user = await Users.findAll({ where: { id: req.user } });
+            res.send(user[0]);
         } catch (error) {
-            console.error({ messageError: "unable to get current user", error: err });
+            console.error({ messageError: "unable to get current user", error: error });
         }
     },
 };
