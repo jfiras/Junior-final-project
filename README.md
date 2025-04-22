@@ -24,7 +24,7 @@
 ## 📁 Getting Started
 1. Clone the repository  
    ```bash
-   git clone https://github.com/jfiras/gamehub.git
+   git clone https://github.com/jfiras/FoundIt-App.git
 2. Follow backend/frontend setup instructions
 
 ## 📝 License
